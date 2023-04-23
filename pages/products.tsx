@@ -1,5 +1,5 @@
 import { Layout, PenIcon } from '@/components';
-import { IProduct } from '@/interfaces/products.type';
+import { IProduct } from '@/models';
 import axios from 'axios';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -30,7 +30,7 @@ export default function ProductsPage () {
               <td>{product.title}</td>
               <td>
                 <Link
-                  href={`/products/${product?._id}`}
+                  href={`/products/edit/${product?._id}`}
                 >
                   <PenIcon className='w-4 h-4' />
                 </Link>

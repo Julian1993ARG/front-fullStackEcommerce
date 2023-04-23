@@ -1,5 +1,5 @@
 import { mongooseConnect } from '@/lib';
-import { Product } from '@/models';
+import { IProduct, Product } from '@/models';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handle (req: NextApiRequest, res: NextApiResponse) {
@@ -11,12 +11,12 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
   if (method === 'POST') {
     const { title, description, price } = req.body;
 
-    const newProduct = await Product.create({
+    const newProduct:IProduct = await Product.create({
       title, description, price
     });
 
     return res.status(201).json(newProduct);
   }
 
-  return { error: 'Method not implemented' };
+  res.status(405).json({ error: 'Method not implemented' });
 }
