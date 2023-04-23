@@ -3,6 +3,7 @@ import { IProduct } from '@/models';
 import axios from 'axios';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { TrashIcon } from '../components/Icons';
 
 export default function ProductsPage () {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -33,6 +34,12 @@ export default function ProductsPage () {
                   href={`/products/edit/${product?._id}`}
                 >
                   <PenIcon className='w-4 h-4' />
+                </Link>
+                <Link
+                  className='ml-2'
+                  href={`/products/delete/${product?._id}`}
+                >
+                  <TrashIcon />
                 </Link>
               </td>
             </tr>
