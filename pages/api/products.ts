@@ -27,5 +27,12 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json({ message: 'Product updated' });
   }
 
+  if (method === 'DELETE') {
+    if (req.query?.id) {
+      await Product.deleteOne({ _id: req.query.id });
+      return res.status(200).json({ message: 'Product deleted' });
+    }
+  }
+
   res.status(405).json({ error: 'Method not implemented' });
 }
