@@ -21,6 +21,11 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
 
     return res.status(201).json(newProduct);
   }
+  if (method === 'PUT') {
+    const { title, description, price, _id } = req.body;
+    await Product.updateOne({ _id }, { title, description, price });
+    return res.status(200).json({ message: 'Product updated' });
+  }
 
   res.status(405).json({ error: 'Method not implemented' });
 }
