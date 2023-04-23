@@ -6,6 +6,10 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
   await mongooseConnect();
   const { method } = req;
   if (method === 'GET') {
+    if (req.query.id) {
+      const { id } = req.query;
+      res.json(await Product.findOne({ _id: id }));
+    }
     res.json(await Product.find());
   }
   if (method === 'POST') {
