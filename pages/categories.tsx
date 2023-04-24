@@ -1,11 +1,16 @@
 import { Layout } from '@/components';
-import { useState } from 'react';
+import axios from 'axios';
+import { FormEvent, useState } from 'react';
 
 export default function CategoriesPage () {
   const [name, setName] = useState('');
-  function saveCategory (e) {
-    const data = 'data';
+
+  async function saveCategory (e:FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    await axios.post('/api/categories', { name });
+    setName('');
   }
+
   return (
     <Layout>
       <h1>Categories</h1>
@@ -20,6 +25,7 @@ export default function CategoriesPage () {
           type='text'
           placeholder='Category name'
           className='mb-0'
+          onChange={e => setName(e.target.value)}
         />
         <button
           type='submit'
