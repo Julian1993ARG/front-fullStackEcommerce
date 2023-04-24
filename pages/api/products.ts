@@ -13,17 +13,17 @@ export default async function handle (req: NextApiRequest, res: NextApiResponse)
     res.json(await Product.find());
   }
   if (method === 'POST') {
-    const { title, description, price } = req.body;
+    const { title, description, price, images } = req.body;
 
     const newProduct:IProduct = await Product.create({
-      title, description, price
+      title, description, price, images
     });
 
     return res.status(201).json(newProduct);
   }
   if (method === 'PUT') {
-    const { title, description, price, _id } = req.body;
-    await Product.updateOne({ _id }, { title, description, price });
+    const { title, description, price, _id, images } = req.body;
+    await Product.updateOne({ _id }, { title, description, price, images });
     return res.status(200).json({ message: 'Product updated' });
   }
 

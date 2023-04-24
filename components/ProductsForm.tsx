@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { UploadIcon } from './Icons';
+import { UploadIcon, Spinner } from './';
+import Image from 'next/image';
 
 export default function ProductsForm ({
   ...productInfo
@@ -10,13 +11,14 @@ export default function ProductsForm ({
   const [description, setDescription] = useState(productInfo.description || '');
   const [price, setPrice] = useState(productInfo.price || 0);
   const [gotToProducts, setGoToProducts] = useState(false);
+  const [images, setImages] = useState<string[]>(productInfo.images || []);
+  const [isUploading, setIsUploading] = useState(false);
 
   const rounter = useRouter();
-  const images = '';
 
   async function createProduct (ev: React.FormEvent<HTMLFormElement>) {
     ev.preventDefault();
-    const data = { title, description, price };
+    const data = { title, description, price, images };
     if (productInfo._id) {
       await axios.put('/api/products', { ...data, _id: productInfo._id });
     } else {
@@ -32,6 +34,7 @@ export default function ProductsForm ({
   async function unploadImages (ev: React.ChangeEvent<HTMLInputElement>) {
     const files = ev.target.files;
     if (files) {
+      setIsUploading(true);
       const data = new FormData();
       if (files.length > 1) {
         for (let i = 0; i < files.length; i++) {
@@ -40,11 +43,9 @@ export default function ProductsForm ({
       } else {
         data.append('file', files[0] as Blob);
       }
-      const res = await axios.post('/api/upload', data, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
+      const res = await axios.post('/api/upload', data);
+      setImages(prev => [...prev, ...res.data.links]);
+      setIsUploading(false);
     }
   }
   return (
@@ -59,8 +60,27 @@ export default function ProductsForm ({
       <label>
         Photos
       </label>
-      <div>
-        <label className='w-24 h-24  text-center cursor-pointer flex flex-col items-center justify-center text-sm gap-1 text-gray-500 rounded-lg bg-gray-200'><UploadIcon />
+      <div className='mb-2 flex flex-wrap gap-1'>
+        {
+        !!images?.length && images.map((link, index) => (
+          <div key={index} className='w-24 h-24 relative'>
+            <Image
+              src={link}
+              alt='product Image'
+              className='rounded-lg'
+              fill
+            />
+          </div>
+        ))
+      }
+        {
+        isUploading && (
+          <div className='h-24 flex items-center '>
+            <Spinner />
+          </div>
+        )
+      }
+        <label className=' w-24 h-24  text-center cursor-pointer flex flex-col items-center justify-center text-sm gap-1 text-gray-500 rounded-lg bg-gray-200'><UploadIcon />
           <div>Upload</div>
           <input
             type='file'
@@ -68,13 +88,6 @@ export default function ProductsForm ({
             onChange={unploadImages}
           />
         </label>
-        {
-          !images?.length && (
-            <div>
-              No photos in this Product
-            </div>
-          )
-        }
       </div>
 
       <label>Products description</label>
