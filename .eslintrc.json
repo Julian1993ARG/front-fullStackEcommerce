@@ -12,6 +12,13 @@
     "react/no-unescaped-entities": "off",
 
     "react/display-name": "off",
+    "react/jsx-max-props-per-line":[
+      "warn",
+      {
+        "maximum": 1,
+        "when": "always"
+      }
+    ],
     "react/jsx-curly-brace-presence": [
       "warn",
       { "props": "never", "children": "never" }

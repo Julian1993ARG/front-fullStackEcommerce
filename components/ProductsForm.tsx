@@ -48,6 +48,7 @@ export default function ProductsForm ({
       setIsUploading(false);
     }
   }
+
   return (
     <form onSubmit={createProduct}>
       <label>Products name</label>
@@ -63,7 +64,10 @@ export default function ProductsForm ({
       <div className='mb-2 flex flex-wrap gap-1'>
         {
         !!images?.length && images.map((link, index) => (
-          <div key={index} className='w-24 h-24 relative'>
+          <div
+            key={index}
+            className='w-24 h-24 relative'
+          >
             <Image
               src={link}
               alt='product Image'
