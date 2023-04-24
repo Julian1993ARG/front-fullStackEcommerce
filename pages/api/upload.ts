@@ -35,7 +35,7 @@ export default async function handle (req:NextApiRequest, res:NextApiResponse) {
       ACL: 'public-read',
       ContentType: mime.lookup(file.path) as string
     }));
-    const link = `https://${bucketName}.amazonaws.com/${newFileName}`;
+    const link = `https://${bucketName}.s3.us-east-2.amazonaws.com/${newFileName}`;
     links.push(link);
   }
   res.json({ links });
